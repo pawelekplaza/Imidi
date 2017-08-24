@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Imidi">
+
+    <Color x:Key="BackgroundDarkTheme">#454545</Color>
+    <SolidColorBrush x:Key="BackgroundDarkThemeBrush" Color="{StaticResource BackgroundDarkTheme}" />
+
+    <Color x:Key="ForegroundDarkTheme">#dbdbdb</Color>
+    <SolidColorBrush x:Key="ForegroundDarkThemeBrush" Color="{StaticResource ForegroundDarkTheme}" />
+
+</ResourceDictionary>
