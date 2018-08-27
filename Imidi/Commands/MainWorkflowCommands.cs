@@ -1,13 +1,14 @@
 ﻿using Imidi.Helpers;
 using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Imidi.Commands
 {
     public static class MainWorkflowCommands
     {
-        public static RelayCommand MaximizeOrNormalizeWindow => _maximizeOrNormalizeWindow;
-        public static RelayCommand CloseWindow => _closeWindow;
+        public static ICommand MaximizeOrNormalizeWindow => _maximizeOrNormalizeWindow;
+        public static ICommand CloseWindow => _closeWindow;
 
         private static RelayCommand _maximizeOrNormalizeWindow = new RelayCommand(param =>
         {

@@ -29,42 +29,48 @@
         <KeyBinding Modifiers="Ctrl" Key="X"
                     Command="{x:Static commands:MainWorkflowCommands.CloseWindow}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+        <KeyBinding Modifiers="Ctrl" Key="Up"
+                    Command="{Binding GoToUpperPath, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
     </Window.InputBindings>
 
     <Window.Template>
-        <ControlTemplate>
+        <ControlTemplate TargetType="{x:Type local:MainWindow}">
             <Border Padding="{Binding MainPadding}">
-                <Grid Background="{DynamicResource BackgroundDarkThemeBrush}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
-                    <!-- Current path -->
-                    <controls:PathControl x:Name="pathControl"/>
-                    
-                    <!-- Files and folders -->
-                    <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
-                                  Grid.Row="1">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Vertical"></WrapPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding }"
-                                           Margin="5 0"
-                                           Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource DivideConverter}, ConverterParameter='4'}"
-                                           TextTrimming="CharacterEllipsis"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                </Grid>
+                <ContentPresenter />
             </Border>
         </ControlTemplate>
     </Window.Template>
-    
+
+
+    <!-- Window content -->
+    <Grid Background="{DynamicResource BackgroundDarkThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!-- Current path -->
+        <controls:PathControl x:Name="pathControl"/>
+
+        <!-- Files and folders -->
+        <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
+                      Grid.Row="1">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Vertical"></WrapPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding }"
+                               Margin="5 0"
+                               Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource DivideConverter}, ConverterParameter='4'}"
+                               TextTrimming="CharacterEllipsis"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </Grid>
+
 </Window>
