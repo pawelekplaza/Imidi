@@ -7,11 +7,16 @@
         xmlns:commands="clr-namespace:Imidi.Commands"
         xmlns:controls="clr-namespace:Imidi.Controls"
         xmlns:viewModels="clr-namespace:Imidi.ViewModels"
+        xmlns:converters="clr-namespace:Imidi.Converters"
         mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         Title="imidi" Height="480" Width="720">
+
+    <Window.Resources>
+        <converters:DivideConverter x:Key="DivideConverter"/>
+    </Window.Resources>
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
@@ -35,7 +40,27 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <controls:PathControl />
+                    <!-- Current path -->
+                    <controls:PathControl x:Name="pathControl"/>
+                    
+                    <!-- Files and folders -->
+                    <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
+                                  Grid.Row="1">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical"></WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding }"
+                                           Margin="5 0"
+                                           Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource DivideConverter}, ConverterParameter='4'}"
+                                           TextTrimming="CharacterEllipsis"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
                 </Grid>
             </Border>

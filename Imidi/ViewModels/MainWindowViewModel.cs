@@ -11,7 +11,7 @@ namespace Imidi.ViewModels
             get
             {
                 switch (Taskbar.Position)
-                {                    
+                {
                     case TaskbarPosition.Left:
                         return new Thickness(Taskbar.CurrentBounds.Width + DefaultMainPadding, DefaultMainPadding, DefaultMainPadding, DefaultMainPadding);
                     case TaskbarPosition.Top:
