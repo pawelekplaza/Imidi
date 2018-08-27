@@ -4,23 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Imidi"
-        mc:Ignorable="d"      
+        xmlns:commands="clr-namespace:Imidi.Commands"
+        xmlns:controls="clr-namespace:Imidi.Controls"
+        xmlns:viewModels="clr-namespace:Imidi.ViewModels"
+        mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="imidi" Height="300" Width="300">
+        Title="imidi" Height="480" Width="720">
 
-    <WindowChrome.WindowChrome>
-        <WindowChrome 
-            ResizeBorderThickness="{Binding ResizeBorderThickness}"
-            CornerRadius="0"
-            CaptionHeight="0"
-            GlassFrameThickness="0"
-            />
-    </WindowChrome.WindowChrome>
-    <Grid>
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Window.DataContext>
 
-        <TextBlock Margin="50" FontSize="18" Text="This is just a test." />
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="M"
+                    Command="{x:Static commands:MainWorkflowCommands.MaximizeOrNormalizeWindow}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+        <KeyBinding Modifiers="Ctrl" Key="X"
+                    Command="{x:Static commands:MainWorkflowCommands.CloseWindow}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+    </Window.InputBindings>
 
-    </Grid>
+    <Window.Template>
+        <ControlTemplate>
+            <Border Padding="{Binding MainPadding}">
+                <Grid Background="{DynamicResource BackgroundDarkThemeBrush}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <controls:PathControl />
+
+                </Grid>
+            </Border>
+        </ControlTemplate>
+    </Window.Template>
+    
 </Window>

@@ -21,7 +21,7 @@ namespace Imidi
     {
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
     }
 }
