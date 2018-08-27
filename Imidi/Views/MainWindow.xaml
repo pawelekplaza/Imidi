@@ -7,6 +7,7 @@
         xmlns:commands="clr-namespace:Imidi.Commands"
         xmlns:controls="clr-namespace:Imidi.Controls"
         xmlns:viewModels="clr-namespace:Imidi.ViewModels"
+        xmlns:helpers="clr-namespace:Imidi.Helpers"
         xmlns:converters="clr-namespace:Imidi.Converters"
         mc:Ignorable="d"
         AllowsTransparency="True"
@@ -16,22 +17,12 @@
 
     <Window.Resources>
         <converters:DivideConverter x:Key="DivideConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
-
-    <Window.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="M"
-                    Command="{x:Static commands:MainWorkflowCommands.MaximizeOrNormalizeWindow}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-        <KeyBinding Modifiers="Ctrl" Key="X"
-                    Command="{x:Static commands:MainWorkflowCommands.CloseWindow}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-        <KeyBinding Modifiers="Ctrl" Key="Up"
-                    Command="{Binding GoToUpperPath, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-    </Window.InputBindings>
 
     <Window.Template>
         <ControlTemplate TargetType="{x:Type local:MainWindow}">
@@ -41,20 +32,48 @@
         </ControlTemplate>
     </Window.Template>
 
-
     <!-- Window content -->
     <Grid Background="{DynamicResource BackgroundDarkThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
         <!-- Current path -->
-        <controls:PathControl x:Name="pathControl"/>
+        <controls:PathControl x:Name="pathControl"
+                              IsTabStop="False"/>
+
+        <!-- Filter -->
+        <TextBlock Grid.Row="1"
+                   VerticalAlignment="Center"
+                   Margin="5 0">
+            <Run Text="Filter: "/>
+            <Run Text="{Binding CurrentFilter, Source={x:Static helpers:FilterNotifier.Instance}, UpdateSourceTrigger=PropertyChanged}"/>
+        </TextBlock>
+
+        <!-- Filter fake -->
+        <TextBox x:Name="filterFake"
+                 Text="{Binding CurrentFilter, Source={x:Static helpers:FilterNotifier.Instance}, UpdateSourceTrigger=PropertyChanged}"
+                 Visibility="Visible"
+                 Height="0"
+                 Width="0">
+            <TextBox.InputBindings>
+                <KeyBinding Modifiers="Ctrl" Key="M"
+                            Command="{x:Static commands:MainWorkflowCommands.MaximizeOrNormalizeWindow}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                <KeyBinding Modifiers="Ctrl" Key="X"
+                            Command="{x:Static commands:MainWorkflowCommands.CloseWindow}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                <KeyBinding Modifiers="Ctrl" Key="Up"
+                            Command="{Binding GoToUpperPath, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+            </TextBox.InputBindings>
+        </TextBox>
 
         <!-- Files and folders -->
         <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
-                      Grid.Row="1">
+                      Grid.Row="2"
+                      IsTabStop="False">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Vertical"></WrapPanel>
@@ -63,9 +82,10 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding }"
-                               Margin="5 0"
+                    <TextBlock Text="{Binding Name}"
+                               Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                                Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource DivideConverter}, ConverterParameter='4'}"
+                               Margin="5 0"
                                TextTrimming="CharacterEllipsis"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

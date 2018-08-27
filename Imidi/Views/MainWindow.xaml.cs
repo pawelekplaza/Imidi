@@ -1,5 +1,6 @@
 ﻿using Imidi.Commands;
 using Imidi.Helpers;
+using Imidi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,12 @@ namespace Imidi
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += OnMainWindowLoaded;
+        }
+
+        private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            filterFake.Focus();
         }
 
         public ICommand GoToUpperPath => pathControl.GoToUpperPath;
