@@ -39,6 +39,7 @@ namespace Imidi
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
         {
             filterFake.Focus();
+            DataContext.PropertyChanged("LoadTime");
         }
 
         public ICommand GoToUpperPath => pathControl.GoToUpperPath;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Imidi.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -15,7 +16,8 @@ namespace Imidi
     {
         public App()
         {
-            MainWindow = new MainWindow();            
+            MainWindowViewModel.StartTime = DateTime.Now;
+            MainWindow = new MainWindow();
             MainWindow.Show();
         }
     }

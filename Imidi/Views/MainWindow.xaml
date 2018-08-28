@@ -45,6 +45,15 @@
         <controls:PathControl x:Name="pathControl"
                               IsTabStop="False"/>
 
+        <!-- For debugging purposes -->
+        <TextBlock VerticalAlignment="Bottom"
+                   Margin="5 0 0 0"
+                   Foreground="{DynamicResource ForegroundDarkThemeBrush}">
+            <Run Text="Load time: "/>
+            <Run Text="{Binding LoadTime, Mode=OneWay}"/>
+            <Run Text=" ms."/>
+        </TextBlock>
+
         <!-- Filter -->
         <TextBlock Grid.Row="1"
                    VerticalAlignment="Center"
@@ -103,9 +112,10 @@
                       HorizontalScrollBarVisibility="Disabled"
                       Grid.Row="2">
             <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
-                          Height="{Binding VisibleEntries.Count, ElementName=pathControl, Converter={StaticResource FilesCountToControlHeight}}"
                           IsTabStop="False"
-                          VerticalAlignment="Top">
+                          VerticalAlignment="Top"
+                          VirtualizingPanel.VirtualizationMode="Recycling"
+                          VirtualizingPanel.IsVirtualizing="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"></WrapPanel>

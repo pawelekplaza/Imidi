@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -15,6 +17,7 @@ namespace Imidi.Controls
     public partial class PathControl : UserControl, INotifyPropertyChanged
     {
         private PathModel _model;
+        private List<FileEntry> _entries = new List<FileEntry>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -92,8 +95,21 @@ namespace Imidi.Controls
 
         private void UpdateFileEntries()
         {
-            FileEntries = new ObservableCollection<FileEntry>(Directory.EnumerateFileSystemEntries(CurrentPath).Select(v => new FileInfo(v).Name).Select(v => new FileEntry(v)));
+            var entries = GetEntries();
+            FileEntries = new ObservableCollection<FileEntry>(entries.Take(120));
+
+            if (entries.Count > 120)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    Thread.Sleep(20);
+                    FileEntries = new ObservableCollection<FileEntry>(entries);
+                });
+            }
         }
+
+        private List<FileEntry> GetEntries() =>
+            Directory.EnumerateFileSystemEntries(CurrentPath).Select(v => new FileInfo(v).Name).Select(v => new FileEntry(v)).ToList();
 
         private void RaisePropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

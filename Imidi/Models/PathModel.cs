@@ -16,6 +16,7 @@ namespace Imidi.Models
         public PathModel(string path)
         {
             CurrentPath = path;
+            FileEntries = new ObservableCollection<FileEntry>();
         }
     }
 }
