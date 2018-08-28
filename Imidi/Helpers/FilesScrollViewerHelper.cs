@@ -15,6 +15,8 @@ namespace Imidi.Helpers
 
         public ICommand ScrollUp { get; private set; }
         public ICommand ScrollDown { get; private set; }
+        public ICommand PageUp { get; private set; }
+        public ICommand PageDown { get; private set; }
 
         public FilesScrollViewerHelper()
         {
@@ -31,12 +33,20 @@ namespace Imidi.Helpers
             {
                 Scroll(param, VerticalStep);
             });
+            PageUp = new RelayCommand(param =>
+            {
+                GetScrollViewer(param).PageUp();
+            });
+            PageDown = new RelayCommand(param =>
+            {
+                GetScrollViewer(param).PageDown();
+            });
         }
 
         private void Scroll(object param, double offset)
         {
             var scroll = GetScrollViewer(param);
-            scroll.ScrollToVerticalOffset(scroll.VerticalOffset + offset);
+            scroll.VerticalScroll(offset);
         }
 
         private ScrollViewer GetScrollViewer(object param)

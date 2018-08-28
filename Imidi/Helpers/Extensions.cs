@@ -1,5 +1,6 @@
 ﻿using Imidi.ViewModels;
 using System;
+using System.Windows.Controls;
 
 namespace Imidi
 {
@@ -11,5 +12,8 @@ namespace Imidi
                 throw new ArgumentException($"Expected object type: { typeof(ViewModelBase) }.");
             viewModelBase.RaisePropertyChanged(propertyName);
         }
+
+        public static void VerticalScroll(this ScrollViewer scroll, double offset) =>
+            scroll.ScrollToVerticalOffset(scroll.VerticalOffset + offset);
     }
 }

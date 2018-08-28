@@ -74,6 +74,12 @@
                 <KeyBinding Key="Up"
                             Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollUp}"
                             CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                <KeyBinding Key="PageUp"
+                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=PageUp}"
+                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                <KeyBinding Key="PageDown"
+                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=PageDown}"
+                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
             </TextBox.InputBindings>
         </TextBox>
 
