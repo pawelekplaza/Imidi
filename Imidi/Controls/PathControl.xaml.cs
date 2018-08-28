@@ -72,7 +72,8 @@ namespace Imidi.Controls
         private void RefreshVisibleEntries()
         {
             RaisePropertyChanged(nameof(VisibleEntries));
-            SelectionNotifier.Instance.Select(VisibleEntries.FirstOrDefault());
+            if (!VisibleEntries.Any(v => v == SelectionNotifier.Instance.CurrentSelection))
+                SelectionNotifier.Instance.Select(VisibleEntries.FirstOrDefault());
         }
 
         private void HookEvents()
