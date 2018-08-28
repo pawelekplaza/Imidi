@@ -36,7 +36,7 @@ namespace Imidi.Controls
             {
                 _model.FileEntries = value;
                 RaisePropertyChanged(nameof(FileEntries));
-                RaisePropertyChanged(nameof(VisibleEntries));
+                RefreshVisibleEntries();
             }
         }
 
@@ -66,7 +66,13 @@ namespace Imidi.Controls
         {
             foreach (var entry in FileEntries)
                 entry.IsVisible = entry.Name.ToLower().Contains(filter.ToLower());
+            RefreshVisibleEntries();
+        }
+
+        private void RefreshVisibleEntries()
+        {
             RaisePropertyChanged(nameof(VisibleEntries));
+            SelectionNotifier.Instance.Select(VisibleEntries.FirstOrDefault());
         }
 
         private void HookEvents()

@@ -4,6 +4,7 @@
     {
         private string _name;
         private bool _isVisible = true;
+        private bool _isSelected;
 
         public string Name
         {
@@ -15,6 +16,12 @@
         {
             get { return _isVisible; }
             set { _isVisible = value; RaisePropertyChanged(nameof(IsVisible)); }
+        }
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { _isSelected = value; RaisePropertyChanged(nameof(IsSelected)); }
         }
 
         public FileEntry() { }

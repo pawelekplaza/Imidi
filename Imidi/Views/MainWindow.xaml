@@ -13,12 +13,13 @@
         AllowsTransparency="True"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="imidi" Height="480" Width="1000">
+        Title="imidi" Height="480" Width="720">
 
     <Window.Resources>
         <converters:WidthToColumnWidthConverter x:Key="WidthToColumnWidthConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:FilesCountToControlHeight x:Key="FilesCountToControlHeight"/>
+        <converters:IsSelectedEntryBackgroundConverter x:Key="IsSelectedEntryBackgroundConverter"/>
     </Window.Resources>
 
     <Window.DataContext>
@@ -106,11 +107,14 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}"
-                                   Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                   Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource WidthToColumnWidthConverter}, ConverterParameter='4'}"
-                                   Margin="{Binding Source={x:Static viewModels:MainWindowViewModel.FileEntryMargin}}"
-                                   TextTrimming="CharacterEllipsis"/>
+                        <Grid Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource WidthToColumnWidthConverter}, ConverterParameter='4'}"
+                              Margin="{Binding Source={x:Static viewModels:MainWindowViewModel.FileEntryMargin}}"
+                              Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="{Binding Name}"
+                                       Background="{Binding IsSelected, Converter={StaticResource IsSelectedEntryBackgroundConverter}}"
+                                       HorizontalAlignment="Left"
+                                       TextTrimming="CharacterEllipsis"/>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
