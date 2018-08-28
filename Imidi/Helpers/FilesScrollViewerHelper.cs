@@ -17,6 +17,8 @@ namespace Imidi.Helpers
         public ICommand ScrollDown { get; private set; }
         public ICommand PageUp { get; private set; }
         public ICommand PageDown { get; private set; }
+        public ICommand ScrollHome { get; private set; }
+        public ICommand ScrollEnd { get; private set; }
 
         public FilesScrollViewerHelper()
         {
@@ -40,6 +42,14 @@ namespace Imidi.Helpers
             PageDown = new RelayCommand(param =>
             {
                 GetScrollViewer(param).PageDown();
+            });
+            ScrollHome = new RelayCommand(param =>
+            {
+                GetScrollViewer(param).ScrollToHome();
+            });
+            ScrollEnd = new RelayCommand(param =>
+            {
+                GetScrollViewer(param).ScrollToEnd();
             });
         }
 

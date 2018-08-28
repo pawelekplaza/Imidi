@@ -80,6 +80,12 @@
                 <KeyBinding Key="PageDown"
                             Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=PageDown}"
                             CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                <KeyBinding Key="Home"
+                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollHome}"
+                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                <KeyBinding Key="End"
+                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollEnd}"
+                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
             </TextBox.InputBindings>
         </TextBox>
 
