@@ -21,11 +21,12 @@ namespace Imidi
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
+    {        
         public MainWindow()
         {
             InitializeComponent();
             Loaded += OnMainWindowLoaded;
+            FilterNotifier.Instance.FilterChanged += () => filesScrollViewer.ScrollToHome();
         }
 
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)

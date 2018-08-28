@@ -18,6 +18,7 @@
     <Window.Resources>
         <converters:DivideConverter x:Key="DivideConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:FilesCountToControlHeight x:Key="FilesCountToControlHeight"/>
     </Window.Resources>
 
     <Window.DataContext>
@@ -67,29 +68,41 @@
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                 <KeyBinding Modifiers="Ctrl" Key="Up"
                             Command="{Binding GoToUpperPath, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                <KeyBinding Key="Down"
+                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollDown}"
+                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                <KeyBinding Key="Up"
+                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollUp}"
+                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
             </TextBox.InputBindings>
         </TextBox>
 
         <!-- Files and folders -->
-        <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
-                      Grid.Row="2"
-                      IsTabStop="False">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical"></WrapPanel>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+        <ScrollViewer x:Name="filesScrollViewer"
+                      VerticalScrollBarVisibility="Hidden"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Grid.Row="2">
+            <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
+                          Height="{Binding FileEntries.Count, ElementName=pathControl, Converter={StaticResource FilesCountToControlHeight}}"
+                          IsTabStop="False"
+                          VerticalAlignment="Top">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Vertical"></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"
-                               Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                               Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource DivideConverter}, ConverterParameter='4'}"
-                               Margin="5 0"
-                               TextTrimming="CharacterEllipsis"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"
+                                   Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource DivideConverter}, ConverterParameter='4'}"
+                                   Margin="5 0"
+                                   TextTrimming="CharacterEllipsis"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
 
     </Grid>
 
