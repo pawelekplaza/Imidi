@@ -13,10 +13,10 @@
         AllowsTransparency="True"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="imidi" Height="480" Width="720">
+        Title="imidi" Height="480" Width="1000">
 
     <Window.Resources>
-        <converters:DivideConverter x:Key="DivideConverter"/>
+        <converters:WidthToColumnWidthConverter x:Key="WidthToColumnWidthConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:FilesCountToControlHeight x:Key="FilesCountToControlHeight"/>
     </Window.Resources>
@@ -95,12 +95,12 @@
                       HorizontalScrollBarVisibility="Disabled"
                       Grid.Row="2">
             <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
-                          Height="{Binding FileEntries.Count, ElementName=pathControl, Converter={StaticResource FilesCountToControlHeight}}"
+                          Height="{Binding VisibleEntries.Count, ElementName=pathControl, Converter={StaticResource FilesCountToControlHeight}}"
                           IsTabStop="False"
                           VerticalAlignment="Top">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Vertical"></WrapPanel>
+                        <WrapPanel Orientation="Horizontal"></WrapPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -108,8 +108,8 @@
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"
                                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                   Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource DivideConverter}, ConverterParameter='4'}"
-                                   Margin="5 0"
+                                   Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource WidthToColumnWidthConverter}, ConverterParameter='4'}"
+                                   Margin="{Binding Source={x:Static viewModels:MainWindowViewModel.FileEntryMargin}}"
                                    TextTrimming="CharacterEllipsis"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

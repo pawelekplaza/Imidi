@@ -2,6 +2,7 @@
 using Imidi.Models;
 using Imidi.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -31,8 +32,15 @@ namespace Imidi.Controls
         public ObservableCollection<FileEntry> FileEntries
         {
             get => _model.FileEntries;
-            set { _model.FileEntries = value; RaisePropertyChanged(nameof(FileEntries)); }
+            set
+            {
+                _model.FileEntries = value;
+                RaisePropertyChanged(nameof(FileEntries));
+                RaisePropertyChanged(nameof(VisibleEntries));
+            }
         }
+
+        public IEnumerable<FileEntry> VisibleEntries => FileEntries.Where(v => v.IsVisible);
 
         public ICommand GoToUpperPath { get; private set; }
 
@@ -58,6 +66,7 @@ namespace Imidi.Controls
         {
             foreach (var entry in FileEntries)
                 entry.IsVisible = entry.Name.ToLower().Contains(filter.ToLower());
+            RaisePropertyChanged(nameof(VisibleEntries));
         }
 
         private void HookEvents()

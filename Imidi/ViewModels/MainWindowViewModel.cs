@@ -6,6 +6,8 @@ namespace Imidi.ViewModels
     {
         private const double DefaultMainPadding = 6;
 
+        public static readonly Thickness FileEntryMargin = new Thickness(5, 0, 5, 0);
+
         public Thickness MainPadding
         {
             get

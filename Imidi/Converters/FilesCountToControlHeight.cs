@@ -9,7 +9,7 @@ namespace Imidi.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var count = (int)value;
-            return count * 14.06 / 4.0;
+            return 14.06 * (count / 4 + 1) + 5;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -21,12 +21,19 @@ namespace Imidi
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {        
+    {
         public MainWindow()
         {
             InitializeComponent();
+            PreviewMouseLeftButtonDown += OnMainWindowPreviewMouseLeftButtonDown;
             Loaded += OnMainWindowLoaded;
             FilterNotifier.Instance.FilterChanged += () => filesScrollViewer.ScrollToHome();
+        }
+
+        private void OnMainWindowPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            filterFake.Focus();
+            DragMove();
         }
 
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)

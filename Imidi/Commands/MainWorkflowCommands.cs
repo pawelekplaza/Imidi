@@ -7,20 +7,22 @@ namespace Imidi.Commands
 {
     public static class MainWorkflowCommands
     {
-        public static ICommand MaximizeOrNormalizeWindow => _maximizeOrNormalizeWindow;
-        public static ICommand CloseWindow => _closeWindow;
+        public static ICommand MaximizeOrNormalizeWindow { get; private set; }
+        public static ICommand CloseWindow { get; private set; }
 
-        private static RelayCommand _maximizeOrNormalizeWindow = new RelayCommand(param =>
+        static MainWorkflowCommands()
         {
-            var window = GetWindow(param);
-            window.WindowState = window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        });
-
-        private static RelayCommand _closeWindow = new RelayCommand(param =>
-        {
-            var window = GetWindow(param);
-            window.Close();
-        });
+            MaximizeOrNormalizeWindow = new RelayCommand(param =>
+            {
+                var window = GetWindow(param);
+                window.WindowState = window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            });
+            CloseWindow = new RelayCommand(param =>
+            {
+                var window = GetWindow(param);
+                window.Close();
+            });
+        }
 
         private static Window GetWindow(object param)
         {

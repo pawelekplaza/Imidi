@@ -15,8 +15,7 @@ namespace Imidi
     {
         public App()
         {
-            MainWindow = new MainWindow();
-            MainWindow.PreviewMouseLeftButtonDown += (s, e) => MainWindow.DragMove();
+            MainWindow = new MainWindow();            
             MainWindow.Show();
         }
     }
