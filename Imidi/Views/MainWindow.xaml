@@ -19,7 +19,6 @@
         <converters:WidthToColumnWidthConverter x:Key="WidthToColumnWidthConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:FilesCountToControlHeight x:Key="FilesCountToControlHeight"/>
-        <converters:IsSelectedEntryBackgroundConverter x:Key="IsSelectedEntryBackgroundConverter"/>
     </Window.Resources>
 
     <Window.DataContext>
@@ -69,12 +68,6 @@
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                 <KeyBinding Modifiers="Ctrl" Key="Up"
                             Command="{Binding GoToUpperPath, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                <KeyBinding Key="Down"
-                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollDown}"
-                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
-                <KeyBinding Key="Up"
-                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollUp}"
-                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
                 <KeyBinding Key="PageUp"
                             Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=PageUp}"
                             CommandParameter="{Binding ElementName=filesScrollViewer}"/>
@@ -87,6 +80,20 @@
                 <KeyBinding Key="End"
                             Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollEnd}"
                             CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+
+                <!-- File selection -->
+                <KeyBinding Key="Right"
+                            Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveRight}"
+                            CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
+                <KeyBinding Key="Left"
+                            Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveLeft}"
+                            CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
+                <KeyBinding Key="Up"
+                            Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveUp}"
+                            CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
+                <KeyBinding Key="Down"
+                            Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveDown}"
+                            CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
             </TextBox.InputBindings>
         </TextBox>
 
@@ -107,11 +114,11 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource WidthToColumnWidthConverter}, ConverterParameter='4'}"
+                        <Grid Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource WidthToColumnWidthConverter}}"
                               Margin="{Binding Source={x:Static viewModels:MainWindowViewModel.FileEntryMargin}}"
                               Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Text="{Binding Name}"
-                                       Background="{Binding IsSelected, Converter={StaticResource IsSelectedEntryBackgroundConverter}}"
+                                       Background="{Binding Background}"
                                        HorizontalAlignment="Left"
                                        TextTrimming="CharacterEllipsis"/>
                         </Grid>

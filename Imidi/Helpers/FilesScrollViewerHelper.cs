@@ -7,34 +7,23 @@ namespace Imidi.Helpers
     public class FilesScrollViewerHelper
     {
         #region Singleton
-        private static Lazy<FilesScrollViewerHelper> _instance = new Lazy<FilesScrollViewerHelper>();
+        private static Lazy<FilesScrollViewerHelper> _instance = new Lazy<FilesScrollViewerHelper>(() => new FilesScrollViewerHelper());
         public static FilesScrollViewerHelper Instance => _instance.Value;
+        protected FilesScrollViewerHelper()
+        {
+            InitializeCommands();
+        }
         #endregion
 
         public const double VerticalStep = 14.05;
 
-        public ICommand ScrollUp { get; private set; }
-        public ICommand ScrollDown { get; private set; }
         public ICommand PageUp { get; private set; }
         public ICommand PageDown { get; private set; }
         public ICommand ScrollHome { get; private set; }
         public ICommand ScrollEnd { get; private set; }
 
-        public FilesScrollViewerHelper()
-        {
-            InitializeCommands();
-        }
-
         private void InitializeCommands()
         {
-            ScrollUp = new RelayCommand(param =>
-            {
-                Scroll(param, -VerticalStep);
-            });
-            ScrollDown = new RelayCommand(param =>
-            {
-                Scroll(param, VerticalStep);
-            });
             PageUp = new RelayCommand(param =>
             {
                 GetScrollViewer(param).PageUp();

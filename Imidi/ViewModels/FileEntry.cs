@@ -1,7 +1,11 @@
-﻿namespace Imidi.ViewModels
+﻿using System.Windows.Media;
+
+namespace Imidi.ViewModels
 {
     public class FileEntry : ViewModelBase
     {
+        private static readonly SolidColorBrush SelectedBackground = new SolidColorBrush(Color.FromRgb(0x30, 0x30, 0x30));
+
         private string _name;
         private bool _isVisible = true;
         private bool _isSelected;
@@ -21,8 +25,15 @@
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; RaisePropertyChanged(nameof(IsSelected)); }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged(nameof(IsSelected));
+                RaisePropertyChanged(nameof(Background));
+            }
         }
+
+        public SolidColorBrush Background => IsSelected ? SelectedBackground : null;
 
         public FileEntry() { }
 

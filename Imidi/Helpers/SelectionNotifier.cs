@@ -6,8 +6,9 @@ namespace Imidi.Helpers
     public class SelectionNotifier
     {
         #region Singletone
-        private static Lazy<SelectionNotifier> _instance = new Lazy<SelectionNotifier>();
+        private static Lazy<SelectionNotifier> _instance = new Lazy<SelectionNotifier>(() => new SelectionNotifier());
         public static SelectionNotifier Instance => _instance.Value;
+        protected SelectionNotifier() { }
         #endregion
 
         public FileEntry CurrentSelection { get; private set; }

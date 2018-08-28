@@ -6,8 +6,9 @@ namespace Imidi.Helpers
     public class FilterNotifier : INotifyPropertyChanged
     {
         #region Singletone
-        private static Lazy<FilterNotifier> _instance = new Lazy<FilterNotifier>();
+        private static Lazy<FilterNotifier> _instance = new Lazy<FilterNotifier>(() => new FilterNotifier());
         public static FilterNotifier Instance => _instance.Value;
+        protected FilterNotifier() { }
         #endregion
 
         private string _currentFilter;

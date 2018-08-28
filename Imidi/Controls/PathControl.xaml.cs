@@ -40,7 +40,11 @@ namespace Imidi.Controls
             }
         }
 
-        public IEnumerable<FileEntry> VisibleEntries => FileEntries.Where(v => v.IsVisible);
+        public IList<FileEntry> VisibleEntries
+        {
+            get => _model.VisibleEntries;
+            private set { _model.VisibleEntries = value; RaisePropertyChanged(nameof(VisibleEntries)); }
+        }
 
         public ICommand GoToUpperPath { get; private set; }
 
@@ -71,7 +75,12 @@ namespace Imidi.Controls
 
         private void RefreshVisibleEntries()
         {
-            RaisePropertyChanged(nameof(VisibleEntries));
+            VisibleEntries = FileEntries.Where(v => v.IsVisible).ToList();
+            ResetSelectionIfNeeded();
+        }
+
+        private void ResetSelectionIfNeeded()
+        {
             if (!VisibleEntries.Any(v => v == SelectionNotifier.Instance.CurrentSelection))
                 SelectionNotifier.Instance.Select(VisibleEntries.FirstOrDefault());
         }

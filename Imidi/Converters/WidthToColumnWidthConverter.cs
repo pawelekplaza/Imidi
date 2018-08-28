@@ -1,4 +1,5 @@
-﻿using Imidi.ViewModels;
+﻿using Imidi.Helpers;
+using Imidi.ViewModels;
 using System;
 using System.Globalization;
 using System.Windows.Data;
@@ -10,7 +11,7 @@ namespace Imidi.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var number = (double)value;
-            var columns = double.Parse(parameter?.ToString());
+            var columns = SettingsHelper.NumberOfColumns;
             return (number / columns) - (MainWindowViewModel.FileEntryMargin.Left + MainWindowViewModel.FileEntryMargin.Right);
         }
 
