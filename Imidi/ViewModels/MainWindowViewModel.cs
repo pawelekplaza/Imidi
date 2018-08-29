@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics;
 using System.Windows;
 
 namespace Imidi.ViewModels
@@ -8,7 +8,12 @@ namespace Imidi.ViewModels
         private const double DefaultMainPadding = 6;
 
         public static readonly Thickness FileEntryMargin = new Thickness(5, 0, 5, 0);
-        public static DateTime StartTime { get; set; }
+        public static Stopwatch Stopwatch { get; set; } = new Stopwatch();
+        
+        static MainWindowViewModel()
+        {
+            Stopwatch.Start();
+        }
 
         public Thickness MainPadding
         {
@@ -28,6 +33,6 @@ namespace Imidi.ViewModels
             }
         }
 
-        public double LoadTime => (DateTime.Now - StartTime).TotalMilliseconds;
+        public long LoadTime => Stopwatch.ElapsedMilliseconds;
     }
 }

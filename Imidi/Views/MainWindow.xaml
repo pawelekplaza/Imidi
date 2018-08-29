@@ -8,7 +8,7 @@
         xmlns:controls="clr-namespace:Imidi.Controls"
         xmlns:viewModels="clr-namespace:Imidi.ViewModels"
         xmlns:helpers="clr-namespace:Imidi.Helpers"
-        xmlns:converters="clr-namespace:Imidi.Converters"
+        xmlns:customControls="clr-namespace:WPFControls.ColumnsListBox;assembly=WPFControls"
         mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStyle="None"
@@ -16,9 +16,23 @@
         Title="imidi" Height="480" Width="720">
 
     <Window.Resources>
-        <converters:WidthToColumnWidthConverter x:Key="WidthToColumnWidthConverter"/>
-        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converters:FilesCountToControlHeight x:Key="FilesCountToControlHeight"/>
+
+         <!-- Item container style for file entries -->
+        <Style x:Key="FileEntriesItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid Margin="{Binding Source={x:Static viewModels:MainWindowViewModel.FileEntryMargin}}">
+                            <TextBlock Text="{Binding Name}"
+                                   Background="{Binding Background}"
+                                   HorizontalAlignment="Left"
+                                   TextTrimming="CharacterEllipsis"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Window.DataContext>
@@ -33,7 +47,7 @@
         </ControlTemplate>
     </Window.Template>
 
-    <!-- Window content -->
+     <!-- Window content -->
     <Grid Background="{DynamicResource BackgroundDarkThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -78,17 +92,17 @@
                 <KeyBinding Modifiers="Ctrl" Key="Up"
                             Command="{Binding GoToUpperPath, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                 <KeyBinding Key="PageUp"
-                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=PageUp}"
-                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                            Command="{Binding Source={x:Static helpers:ScrollHelper.Instance}, Path=PageUp}"
+                            CommandParameter="{Binding ElementName=filesListBox}"/>
                 <KeyBinding Key="PageDown"
-                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=PageDown}"
-                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                            Command="{Binding Source={x:Static helpers:ScrollHelper.Instance}, Path=PageDown}"
+                            CommandParameter="{Binding ElementName=filesListBox}"/>
                 <KeyBinding Key="Home"
-                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollHome}"
-                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                            Command="{Binding Source={x:Static helpers:ScrollHelper.Instance}, Path=ScrollHome}"
+                            CommandParameter="{Binding ElementName=filesListBox}"/>
                 <KeyBinding Key="End"
-                            Command="{Binding Source={x:Static helpers:FilesScrollViewerHelper.Instance}, Path=ScrollEnd}"
-                            CommandParameter="{Binding ElementName=filesScrollViewer}"/>
+                            Command="{Binding Source={x:Static helpers:ScrollHelper.Instance}, Path=ScrollEnd}"
+                            CommandParameter="{Binding ElementName=filesListBox}"/>
 
                 <!-- File selection -->
                 <KeyBinding Key="Right"
@@ -107,35 +121,12 @@
         </TextBox>
 
         <!-- Files and folders -->
-        <ScrollViewer x:Name="filesScrollViewer"
-                      VerticalScrollBarVisibility="Hidden"
-                      HorizontalScrollBarVisibility="Disabled"
-                      Grid.Row="2">
-            <ItemsControl ItemsSource="{Binding FileEntries, ElementName=pathControl}"
-                          IsTabStop="False"
-                          VerticalAlignment="Top"
-                          VirtualizingPanel.VirtualizationMode="Recycling"
-                          VirtualizingPanel.IsVirtualizing="True">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"></WrapPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Width="{Binding ActualWidth, ElementName=pathControl, Converter={StaticResource WidthToColumnWidthConverter}}"
-                              Margin="{Binding Source={x:Static viewModels:MainWindowViewModel.FileEntryMargin}}"
-                              Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <TextBlock Text="{Binding Name}"
-                                       Background="{Binding Background}"
-                                       HorizontalAlignment="Left"
-                                       TextTrimming="CharacterEllipsis"/>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <customControls:ColumnsListBox x:Name="filesListBox"
+                                       ItemsSource="{Binding VisibleEntries, ElementName=pathControl}"
+                                       ItemContainerStyle="{StaticResource FileEntriesItemContainerStyle}"
+                                       Columns="4"
+                                       Grid.Row="2"
+                                       IsTabStop="False"/>
 
     </Grid>
 

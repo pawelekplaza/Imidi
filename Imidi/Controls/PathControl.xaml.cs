@@ -1,7 +1,6 @@
 ﻿using Imidi.Helpers;
 using Imidi.Models;
 using Imidi.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -17,7 +16,6 @@ namespace Imidi.Controls
     public partial class PathControl : UserControl, INotifyPropertyChanged
     {
         private PathModel _model;
-        private List<FileEntry> _entries = new List<FileEntry>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -32,7 +30,7 @@ namespace Imidi.Controls
             }
         }
 
-        public ObservableCollection<FileEntry> FileEntries
+        public IList<FileEntry> FileEntries
         {
             get => _model.FileEntries;
             set
@@ -46,7 +44,11 @@ namespace Imidi.Controls
         public IList<FileEntry> VisibleEntries
         {
             get => _model.VisibleEntries;
-            private set { _model.VisibleEntries = value; RaisePropertyChanged(nameof(VisibleEntries)); }
+            private set
+            {
+                _model.VisibleEntries = value;
+                RaisePropertyChanged(nameof(VisibleEntries));
+            }
         }
 
         public ICommand GoToUpperPath { get; private set; }
@@ -77,7 +79,7 @@ namespace Imidi.Controls
         }
 
         private void RefreshVisibleEntries()
-        {
+        {            
             VisibleEntries = FileEntries.Where(v => v.IsVisible).ToList();
             ResetSelectionIfNeeded();
         }
@@ -95,20 +97,10 @@ namespace Imidi.Controls
 
         private void UpdateFileEntries()
         {
-            var entries = GetEntries();
-            FileEntries = new ObservableCollection<FileEntry>(entries.Take(120));
-
-            if (entries.Count > 120)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    Thread.Sleep(20);
-                    FileEntries = new ObservableCollection<FileEntry>(entries);
-                });
-            }
+            FileEntries = GetEntries();            
         }
 
-        private List<FileEntry> GetEntries() =>
+        private IList<FileEntry> GetEntries() =>
             Directory.EnumerateFileSystemEntries(CurrentPath).Select(v => new FileInfo(v).Name).Select(v => new FileEntry(v)).ToList();
 
         private void RaisePropertyChanged(string propertyName) =>
