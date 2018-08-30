@@ -1,8 +1,6 @@
 # Imidi
 
-Type anything to filter files.
-
-## Shortcuts
+Use keyboard only.
 
 ### Common:
 - Ctrl + M -> Maximize / normalize.
@@ -19,4 +17,5 @@ Type anything to filter files.
 - File selection -> Use arrows.
 
 ### Filtering:
+- Type anything to apply the filter.
 - Ctrl + X -> Clear the filter.
