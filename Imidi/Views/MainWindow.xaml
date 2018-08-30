@@ -13,21 +13,22 @@
         AllowsTransparency="True"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="imidi" Height="480" Width="720">
+        Title="imidi" Height="485" Width="720">
 
     <Window.Resources>
 
-         <!-- Item container style for file entries -->
+        <!-- Item container style for file entries -->
         <Style x:Key="FileEntriesItemContainerStyle" TargetType="{x:Type ListBoxItem}">
-            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
                         <Grid Margin="{Binding Source={x:Static viewModels:MainWindowViewModel.FileEntryMargin}}">
                             <TextBlock Text="{Binding Name}"
-                                   Background="{Binding Background}"
-                                   HorizontalAlignment="Left"
-                                   TextTrimming="CharacterEllipsis"/>
+                                       Background="{Binding Background}"
+                                       HorizontalAlignment="Left"
+                                       TextTrimming="CharacterEllipsis"/>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -47,6 +48,33 @@
         </ControlTemplate>
     </Window.Template>
 
+    <Window.InputBindings>
+
+        <KeyBinding Modifiers="Ctrl" Key="M"
+                    Command="{x:Static commands:MainWorkflowCommands.MaximizeOrNormalizeWindow}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+        <KeyBinding Modifiers="Ctrl" Key="Q"
+                    Command="{x:Static commands:MainWorkflowCommands.CloseWindow}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+        <KeyBinding Modifiers="Ctrl" Key="Backspace"
+                    Command="{x:Static commands:MainWorkflowCommands.GoToUpperPath}"
+                    CommandTarget="{Binding ElementName=pathControl}"/>
+
+        <!-- Column selection -->
+        <KeyBinding Key="Right"
+                    Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveRight}"
+                    CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
+        <KeyBinding Key="Left"
+                    Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveLeft}"
+                    CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
+
+        <!-- Filtering -->
+        <KeyBinding Modifiers="Ctrl" Key="X"
+                    Command="{x:Static helpers:FilterNotifier.ClearFilterCommand}"
+                    CommandTarget="{Binding ElementName=filterTextBlock}"/>
+
+    </Window.InputBindings>
+
      <!-- Window content -->
     <Grid Background="{DynamicResource BackgroundDarkThemeBrush}">
         <Grid.RowDefinitions>
@@ -57,6 +85,7 @@
 
         <!-- Current path -->
         <controls:PathControl x:Name="pathControl"
+                              CurrentPath="C:\windows\system32"
                               IsTabStop="False"/>
 
         <!-- For debugging purposes -->
@@ -69,64 +98,26 @@
         </TextBlock>
 
         <!-- Filter -->
-        <TextBlock Grid.Row="1"
+        <TextBlock x:Name="filterTextBlock"
+                   Grid.Row="1"
                    VerticalAlignment="Center"
                    Margin="5 0">
             <Run Text="Filter: "/>
             <Run Text="{Binding CurrentFilter, Source={x:Static helpers:FilterNotifier.Instance}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock.CommandBindings>
+                <CommandBinding Command="{x:Static helpers:FilterNotifier.ClearFilterCommand}"
+                                CanExecute="CanClearFilter"
+                                Executed="ClearFilter"/>
+            </TextBlock.CommandBindings>
         </TextBlock>
-
-        <!-- Filter fake -->
-        <TextBox x:Name="filterFake"
-                 Text="{Binding CurrentFilter, Source={x:Static helpers:FilterNotifier.Instance}, UpdateSourceTrigger=PropertyChanged}"
-                 Visibility="Visible"
-                 Height="0"
-                 Width="0">
-            <TextBox.InputBindings>
-                <KeyBinding Modifiers="Ctrl" Key="M"
-                            Command="{x:Static commands:MainWorkflowCommands.MaximizeOrNormalizeWindow}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                <KeyBinding Modifiers="Ctrl" Key="X"
-                            Command="{x:Static commands:MainWorkflowCommands.CloseWindow}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                <KeyBinding Modifiers="Ctrl" Key="Up"
-                            Command="{Binding GoToUpperPath, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                <KeyBinding Key="PageUp"
-                            Command="{Binding Source={x:Static helpers:ScrollHelper.Instance}, Path=PageUp}"
-                            CommandParameter="{Binding ElementName=filesListBox}"/>
-                <KeyBinding Key="PageDown"
-                            Command="{Binding Source={x:Static helpers:ScrollHelper.Instance}, Path=PageDown}"
-                            CommandParameter="{Binding ElementName=filesListBox}"/>
-                <KeyBinding Key="Home"
-                            Command="{Binding Source={x:Static helpers:ScrollHelper.Instance}, Path=ScrollHome}"
-                            CommandParameter="{Binding ElementName=filesListBox}"/>
-                <KeyBinding Key="End"
-                            Command="{Binding Source={x:Static helpers:ScrollHelper.Instance}, Path=ScrollEnd}"
-                            CommandParameter="{Binding ElementName=filesListBox}"/>
-
-                <!-- File selection -->
-                <KeyBinding Key="Right"
-                            Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveRight}"
-                            CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
-                <KeyBinding Key="Left"
-                            Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveLeft}"
-                            CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
-                <KeyBinding Key="Up"
-                            Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveUp}"
-                            CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
-                <KeyBinding Key="Down"
-                            Command="{Binding Source={x:Static helpers:SelectionHelper.Instance}, Path=MoveDown}"
-                            CommandParameter="{Binding VisibleEntries, ElementName=pathControl}"/>
-            </TextBox.InputBindings>
-        </TextBox>
 
         <!-- Files and folders -->
         <customControls:ColumnsListBox x:Name="filesListBox"
                                        ItemsSource="{Binding VisibleEntries, ElementName=pathControl}"
                                        ItemContainerStyle="{StaticResource FileEntriesItemContainerStyle}"
-                                       Columns="4"
+                                       Columns="{x:Static helpers:SettingsHelper.NumberOfColumns}"
                                        Grid.Row="2"
-                                       IsTabStop="False"/>
+                                       Margin="0 0 0 5"/>
 
     </Grid>
 

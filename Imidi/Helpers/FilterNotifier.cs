@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace Imidi.Helpers
 {
@@ -11,8 +12,9 @@ namespace Imidi.Helpers
         protected FilterNotifier() { }
         #endregion
 
-        private string _currentFilter;
+        private string _currentFilter = string.Empty;
 
+        public static readonly RoutedCommand ClearFilterCommand = new RoutedCommand();
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action FilterChanged;
 
@@ -25,6 +27,11 @@ namespace Imidi.Helpers
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentFilter)));
                 FilterChanged?.Invoke();
             }
+        }
+
+        public void ClearFilter()
+        {
+            CurrentFilter = string.Empty;
         }
     }
 }

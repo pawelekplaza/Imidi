@@ -10,22 +10,31 @@ namespace Imidi
         {
             InitializeComponent();
             DataContext.PropertyChanged("LoadTime");
-            PreviewMouseLeftButtonDown += OnMainWindowPreviewMouseLeftButtonDown;
-            Loaded += OnMainWindowLoaded;
+
+            PreviewMouseLeftButtonDown += OnMainWindowPreviewMouseLeftButtonDown;       
+            PreviewTextInput += OnMainWindowTextInput;
+
             FilterNotifier.Instance.FilterChanged += () => filesListBox.ScrollHome();
         }
 
+        private void OnMainWindowTextInput(object sender, TextCompositionEventArgs e)
+        {
+            FilterNotifier.Instance.CurrentFilter += e.Text;
+        }        
+
         private void OnMainWindowPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            filterFake.Focus();
             DragMove();            
         }
 
-        private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
-        {            
-            filterFake.Focus();            
+        private void CanClearFilter(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = FilterNotifier.Instance.CurrentFilter.Length > 0;
         }
 
-        public ICommand GoToUpperPath => pathControl.GoToUpperPath;
+        private void ClearFilter(object sender, ExecutedRoutedEventArgs e)
+        {
+            FilterNotifier.Instance.ClearFilter();
+        }
     }
 }

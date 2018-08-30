@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using WPFControls.ColumnsListBox.Helpers;
 
 namespace Imidi.Helpers
 {
@@ -18,8 +19,6 @@ namespace Imidi.Helpers
 
         public ICommand MoveRight { get; private set; }
         public ICommand MoveLeft { get; private set; }
-        public ICommand MoveUp { get; private set; }
-        public ICommand MoveDown { get; private set; }
 
         private void InitializeCommands()
         {
@@ -27,33 +26,19 @@ namespace Imidi.Helpers
             {
                 var entries = GetEntries(param);
                 var currentIndex = GetIndex(entries);
-                if (currentIndex % SettingsHelper.NumberOfColumns == (SettingsHelper.NumberOfColumns - 1) || entries.Count == currentIndex + 1)
+                var destinedIndex = currentIndex + (int)Math.Ceiling((double)entries.Count / SettingsHelper.NumberOfColumns);
+                if (destinedIndex >= entries.Count)
                     return;
-                SelectionNotifier.Instance.Select(entries[currentIndex + 1]);
+                SelectionNotifier.Instance.Select(entries[destinedIndex]);
             });
             MoveLeft = new RelayCommand(param =>
             {
                 var entries = GetEntries(param);
                 var currentIndex = GetIndex(entries);
-                if (currentIndex % SettingsHelper.NumberOfColumns == 0)
+                var destinedIndex = currentIndex - (int)Math.Ceiling((double)entries.Count / SettingsHelper.NumberOfColumns);
+                if (destinedIndex < 0)
                     return;
-                SelectionNotifier.Instance.Select(entries[currentIndex - 1]);
-            });
-            MoveUp = new RelayCommand(param =>
-            {
-                var entries = GetEntries(param);
-                var currentIndex = GetIndex(entries);
-                if (currentIndex - SettingsHelper.NumberOfColumns < 0)
-                    return;
-                SelectionNotifier.Instance.Select(entries[currentIndex - SettingsHelper.NumberOfColumns]);
-            });
-            MoveDown = new RelayCommand(param =>
-            {
-                var entries = GetEntries(param);
-                var currentIndex = GetIndex(entries);
-                if (currentIndex + SettingsHelper.NumberOfColumns >= entries.Count)
-                    return;
-                SelectionNotifier.Instance.Select(entries[currentIndex + SettingsHelper.NumberOfColumns]);
+                SelectionNotifier.Instance.Select(entries[destinedIndex]);
             });
         }
 
@@ -65,6 +50,6 @@ namespace Imidi.Helpers
         }
 
         private int GetIndex(IList<FileEntry> entries) =>
-            entries.IndexOf(SelectionNotifier.Instance.CurrentSelection);
+            entries.IndexOf(SelectionNotifier.Instance.CurrentSelection as FileEntry);
     }
 }

@@ -2,14 +2,12 @@
 using Imidi.Models;
 using Imidi.ViewModels;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WPFControls.ColumnsListBox.Helpers;
 
 namespace Imidi.Controls
 {
@@ -29,6 +27,8 @@ namespace Imidi.Controls
                 UpdateFileEntries();
             }
         }
+
+        public string ParentPath => new DirectoryInfo(CurrentPath)?.Parent?.FullName;
 
         public IList<FileEntry> FileEntries
         {
@@ -51,24 +51,12 @@ namespace Imidi.Controls
             }
         }
 
-        public ICommand GoToUpperPath { get; private set; }
-
         public PathControl()
         {
             _model = new PathModel();
             InitializeComponent();
-            InitializeCommands();
             HookEvents();
             UpdateFileEntries();
-        }
-
-        private void InitializeCommands()
-        {
-            GoToUpperPath = new RelayCommand(param =>
-            {
-                var directoryInfo = new DirectoryInfo(CurrentPath);
-                CurrentPath = directoryInfo?.Parent?.FullName ?? CurrentPath;
-            });
         }
 
         private void FilterFileEntries(string filter)
@@ -79,7 +67,7 @@ namespace Imidi.Controls
         }
 
         private void RefreshVisibleEntries()
-        {            
+        {
             VisibleEntries = FileEntries.Where(v => v.IsVisible).ToList();
             ResetSelectionIfNeeded();
         }
@@ -97,7 +85,7 @@ namespace Imidi.Controls
 
         private void UpdateFileEntries()
         {
-            FileEntries = GetEntries();            
+            FileEntries = GetEntries();
         }
 
         private IList<FileEntry> GetEntries() =>
@@ -105,5 +93,15 @@ namespace Imidi.Controls
 
         private void RaisePropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private void CanExecuteGoToUpperPath(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = ParentPath != null;
+        }
+
+        private void GoToUpperPath(object sender, ExecutedRoutedEventArgs e)
+        {
+            CurrentPath = ParentPath;
+        }
     }
 }

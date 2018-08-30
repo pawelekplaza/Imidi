@@ -1,8 +1,10 @@
 ﻿using System.Windows.Media;
+using WPFControls.ColumnsListBox.Helpers;
+using WPFControls.ColumnsListBox.Helpers.Interfaces;
 
 namespace Imidi.ViewModels
 {
-    public class FileEntry : ViewModelBase
+    public class FileEntry : ViewModelBase, ISelectable
     {
         private static readonly SolidColorBrush SelectedBackground = new SolidColorBrush(Color.FromRgb(0x30, 0x30, 0x30));
 
@@ -30,12 +32,14 @@ namespace Imidi.ViewModels
                 _isSelected = value;
                 RaisePropertyChanged(nameof(IsSelected));
                 RaisePropertyChanged(nameof(Background));
+                if (value)
+                    SelectionNotifier.Instance.Select(this);
             }
         }
 
         public SolidColorBrush Background => IsSelected ? SelectedBackground : null;
 
-        public FileEntry() { }
+        public FileEntry() : this("") { }
 
         public FileEntry(string name)
         {

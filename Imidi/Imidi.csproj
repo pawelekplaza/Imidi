@@ -72,9 +72,7 @@
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\FilterNotifier.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
-    <Compile Include="Helpers\ScrollHelper.cs" />
     <Compile Include="Helpers\SelectionHelper.cs" />
-    <Compile Include="Helpers\SelectionNotifier.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\Taskbar.cs" />
     <Compile Include="Models\PathModel.cs" />

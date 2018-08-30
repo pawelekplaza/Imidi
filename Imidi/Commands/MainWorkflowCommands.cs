@@ -10,6 +10,8 @@ namespace Imidi.Commands
         public static ICommand MaximizeOrNormalizeWindow { get; private set; }
         public static ICommand CloseWindow { get; private set; }
 
+        public static readonly RoutedCommand GoToUpperPath = new RoutedCommand();
+
         static MainWorkflowCommands()
         {
             MaximizeOrNormalizeWindow = new RelayCommand(param =>
