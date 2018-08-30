@@ -2,13 +2,21 @@
 
 Type anything to filter files.
 
-### Shortcuts:
+## Shortcuts
+
+### Common:
 - Ctrl + M -> Maximize / normalize.
-- Ctrl + Arrow up -> Go to upper directory.
-- Ctrl + X -> Close.
-- Scrolling:
-  - PageDown -> Scroll one page down.
-  - PageUp -> Scroll one page up.
-  - Home -> Scroll to the beginning.
-  - End -> Scroll to the end.
+- Ctrl + Backspace -> Go to upper directory.
+- Ctrl + Q -> Close.
+
+### Scrolling:
+- PageDown -> Scroll one page down.
+- PageUp -> Scroll one page up.
+- Home -> Scroll to the beginning.
+- End -> Scroll to the end.
+
+### Selection:
 - File selection -> Use arrows.
+
+### Filtering:
+- Ctrl + X -> Clear the filter.
