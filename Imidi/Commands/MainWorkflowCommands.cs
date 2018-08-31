@@ -3,34 +3,12 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Imidi.Commands
+namespace Imidi
 {
     public static class MainWorkflowCommands
     {
-        public static ICommand MaximizeOrNormalizeWindow { get; private set; }
-        public static ICommand CloseWindow { get; private set; }
-
+        public static readonly RoutedCommand CloseWindow = new RoutedCommand();
+        public static readonly RoutedCommand MaximizeOrNormalizeWindow = new RoutedCommand();
         public static readonly RoutedCommand GoToUpperPath = new RoutedCommand();
-
-        static MainWorkflowCommands()
-        {
-            MaximizeOrNormalizeWindow = new RelayCommand(param =>
-            {
-                var window = GetWindow(param);
-                window.WindowState = window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-            });
-            CloseWindow = new RelayCommand(param =>
-            {
-                var window = GetWindow(param);
-                window.Close();
-            });
-        }
-
-        private static Window GetWindow(object param)
-        {
-            if (!(param is Window window))
-                throw new ArgumentException($"Expected param type: 'Window'. Given type: { param?.GetType() }.");
-            return window;
-        }
     }
 }

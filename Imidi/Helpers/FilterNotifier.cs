@@ -31,7 +31,7 @@ namespace Imidi.Helpers
 
         public void ClearFilter()
         {
-            CurrentFilter = string.Empty;
+            CurrentFilter = string.Empty;            
         }
     }
 }

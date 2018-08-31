@@ -74,7 +74,7 @@ namespace Imidi.Controls
 
         private void ResetSelectionIfNeeded()
         {
-            if (!VisibleEntries.Any(v => v == SelectionNotifier.Instance.CurrentSelection))
+            if (!VisibleEntries.Any(v => v.IsSelected))
                 SelectionNotifier.Instance.Select(VisibleEntries.FirstOrDefault());
         }
 

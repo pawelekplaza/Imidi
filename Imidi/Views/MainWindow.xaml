@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Imidi"
-        xmlns:commands="clr-namespace:Imidi.Commands"
         xmlns:controls="clr-namespace:Imidi.Controls"
         xmlns:viewModels="clr-namespace:Imidi.ViewModels"
         xmlns:helpers="clr-namespace:Imidi.Helpers"
@@ -48,16 +47,23 @@
         </ControlTemplate>
     </Window.Template>
 
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:MainWorkflowCommands.MaximizeOrNormalizeWindow}"
+                        CanExecute="CanMaximizeOrNormalizeWindow"
+                        Executed="MaximizeOrNormalizeWindow"/>
+        <CommandBinding Command="{x:Static local:MainWorkflowCommands.CloseWindow}"
+                        CanExecute="CanCloseWindow"
+                        Executed="CloseWindow"/>
+    </Window.CommandBindings>
+
     <Window.InputBindings>
 
         <KeyBinding Modifiers="Ctrl" Key="M"
-                    Command="{x:Static commands:MainWorkflowCommands.MaximizeOrNormalizeWindow}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    Command="{x:Static local:MainWorkflowCommands.MaximizeOrNormalizeWindow}"/>
         <KeyBinding Modifiers="Ctrl" Key="Q"
-                    Command="{x:Static commands:MainWorkflowCommands.CloseWindow}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    Command="{x:Static local:MainWorkflowCommands.CloseWindow}"/>
         <KeyBinding Modifiers="Ctrl" Key="Backspace"
-                    Command="{x:Static commands:MainWorkflowCommands.GoToUpperPath}"
+                    Command="{x:Static local:MainWorkflowCommands.GoToUpperPath}"
                     CommandTarget="{Binding ElementName=pathControl}"/>
 
         <!-- Column selection -->
